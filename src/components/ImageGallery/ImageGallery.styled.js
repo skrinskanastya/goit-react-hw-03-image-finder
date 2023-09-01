@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 export const StyledList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   max-width: calc(100vw - 48px);
-  /* grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); */
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 16px;
   margin-top: 0;
   margin-bottom: 0;
   padding: 0;
