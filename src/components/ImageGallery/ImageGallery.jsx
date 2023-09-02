@@ -10,7 +10,6 @@ export const ImageGallery = ({ images, onImageClick }) => {
             key={id}
             src={webformatURL}
             dataSrc={largeImageURL}
-            // image={image}
             onImageClick={onImageClick}
           />
         ))}

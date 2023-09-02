@@ -7,8 +7,6 @@ import { Modal } from './Modal/Modal';
 import { Layout } from './Layout.styled';
 import { fetchImages } from 'helpers/api';
 
-const API_KEY = '38369214-2131a54870ec208cdae419196';
-
 export class App extends Component {
   state = {
     query: '',

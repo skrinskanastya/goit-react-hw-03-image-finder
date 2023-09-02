@@ -1,5 +1,4 @@
 import { Component } from 'react';
-// import { createPortal } from 'react-dom';
 import { StyledOverlay, StyledModal } from './Modal.styled';
 
 export class Modal extends Component {
@@ -24,10 +23,6 @@ export class Modal extends Component {
   };
   render() {
     const { img } = this.props;
-
-    // if (!isOpen) {
-    //   return null;
-    // }
     return (
       <StyledOverlay onClick={this.handleOverlayClick}>
         <StyledModal>
