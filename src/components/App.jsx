@@ -40,7 +40,7 @@ export class App extends Component {
       .then(data => {
         const { hits, totalHits } = data;
         this.setState(prevState => ({
-          images: [...prevState.images, ...data.hits],
+          images: [...prevState.images, ...hits],
           showLoadMoreButton: prevState.page < Math.ceil(totalHits / 12),
         }));
       })
