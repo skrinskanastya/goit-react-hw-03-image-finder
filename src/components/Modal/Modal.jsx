@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { createPortal } from 'react-dom';
+// import { createPortal } from 'react-dom';
 import { StyledOverlay, StyledModal } from './Modal.styled';
 
 export class Modal extends Component {
@@ -11,27 +11,27 @@ export class Modal extends Component {
     window.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  handleKeyPress = e => {
-    if (e.code === 'Escape') {
+  handleKeyPress = evt => {
+    if (evt.code === 'Escape') {
       this.props.onClose();
     }
   };
 
-  handleOverlayClick = e => {
-    if (e.target === e.currentTarget) {
+  handleOverlayClick = ({ target, currentTarget }) => {
+    if (target === currentTarget) {
       this.props.onClose();
     }
   };
   render() {
-    const { isOpen, imageUrl, onClose } = this.props;
+    const { img } = this.props;
 
-    if (!isOpen) {
-      return null;
-    }
-    return createPortal(
+    // if (!isOpen) {
+    //   return null;
+    // }
+    return (
       <StyledOverlay onClick={this.handleOverlayClick}>
         <StyledModal>
-          <img src={imageUrl} alt="" />
+          <img src={img} alt="" />
         </StyledModal>
       </StyledOverlay>
     );

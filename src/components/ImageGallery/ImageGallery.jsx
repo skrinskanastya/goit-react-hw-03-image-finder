@@ -5,10 +5,12 @@ export const ImageGallery = ({ images, onImageClick }) => {
   if (images.length > 0) {
     return (
       <StyledList>
-        {images.map(image => (
+        {images.map(({ id, webformatURL, largeImageURL }) => (
           <ImageGalleryItem
-            key={image.id}
-            image={image}
+            key={id}
+            src={webformatURL}
+            dataSrc={largeImageURL}
+            // image={image}
             onImageClick={onImageClick}
           />
         ))}

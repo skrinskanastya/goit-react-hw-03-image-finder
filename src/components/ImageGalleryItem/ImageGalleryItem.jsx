@@ -1,11 +1,8 @@
 import { StyledItem } from './ImageGalleryItem.styled';
-export const ImageGalleryItem = ({ image, onImageClick }) => {
-  const handleClick = () => {
-    onImageClick(image.largeImageURL);
-  };
+export const ImageGalleryItem = ({ src, dataSrc, onImageClick }) => {
   return (
-    <StyledItem onClick={handleClick}>
-      <img src={image.webformatURL} alt="" />
+    <StyledItem onClick={onImageClick}>
+      <img src={src} data-src={dataSrc} alt="" />
     </StyledItem>
   );
 };

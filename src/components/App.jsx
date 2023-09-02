@@ -5,6 +5,7 @@ import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Layout } from './Layout.styled';
+import { fetchImages } from 'helpers/api';
 
 const API_KEY = '38369214-2131a54870ec208cdae419196';
 
@@ -15,17 +16,18 @@ export class App extends Component {
     page: 1,
     loading: false,
     showLoadMoreButton: false,
-    selectedImage: null,
+    modalImg: '',
+    showModal: false,
   };
 
   handleSubmit = query => {
     this.setState({ query, images: [], page: 1, showLoadMoreButton: false });
   };
-  handleOpenModal = imageUrl => {
-    this.setState({ selectedImage: imageUrl });
+  handleOpenModal = evt => {
+    this.setState({ showModal: true, modalImg: evt.target.dataset.src });
   };
   handleCloseModal = () => {
-    this.setState({ selectedImage: null });
+    this.setState({ showModal: false });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -33,29 +35,21 @@ export class App extends Component {
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page
     ) {
-      this.fetchImages();
+      this.setState({ loading: true });
+      fetchImages(this.state.query, this.state.page)
+        .then(data => {
+          const { hits, totalHits } = data;
+          this.setState(prevState => ({
+            images: [...prevState.images, ...hits],
+            showLoadMoreButton: prevState.page < Math.ceil(totalHits / 12),
+          }));
+        })
+        .catch(error => console.error('Error fetching images:', error))
+        .finally(() => {
+          this.setState({ loading: false });
+        });
     }
   }
-
-  fetchImages = () => {
-    const { query, page } = this.state;
-    this.setState({ loading: true });
-    fetch(
-      `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    )
-      .then(response => response.json())
-      .then(data => {
-        const { hits, totalHits } = data;
-        this.setState(prevState => ({
-          images: [...prevState.images, ...hits],
-          showLoadMoreButton: prevState.page < Math.ceil(totalHits / 12),
-        }));
-      })
-      .catch(error => console.error('Error fetching images:', error))
-      .finally(() => {
-        this.setState({ loading: false });
-      });
-  };
 
   handleLoadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
@@ -73,12 +67,8 @@ export class App extends Component {
           <Button onLoad={this.handleLoadMore} />
         )}
         <Loader loading={this.state.loading} />
-        {this.selectedImage && (
-          <Modal
-            isOpen={true}
-            imageUrl={this.state.selectedImage}
-            onClose={this.handleCloseModal}
-          />
+        {this.state.showModal && (
+          <Modal img={this.state.modalImg} onClose={this.handleCloseModal} />
         )}
       </Layout>
     );
