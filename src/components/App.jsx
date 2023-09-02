@@ -2,8 +2,8 @@ import { Component } from 'react';
 import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
-import { Loader } from './Loader';
-import { Modal } from './Modal';
+import { Loader } from './Loader/Loader';
+import { Modal } from './Modal/Modal';
 import { Layout } from './Layout.styled';
 
 const API_KEY = '38369214-2131a54870ec208cdae419196';
@@ -15,10 +15,17 @@ export class App extends Component {
     page: 1,
     loading: false,
     showLoadMoreButton: false,
+    selectedImage: null,
   };
 
   handleSubmit = query => {
     this.setState({ query, images: [], page: 1, showLoadMoreButton: false });
+  };
+  handleOpenModal = imageUrl => {
+    this.setState({ selectedImage: imageUrl });
+  };
+  handleCloseModal = () => {
+    this.setState({ selectedImage: null });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -58,12 +65,21 @@ export class App extends Component {
     return (
       <Layout>
         <SearchBar onSubmit={this.handleSubmit} />
-        <ImageGallery images={this.state.images} />
+        <ImageGallery
+          images={this.state.images}
+          onImageClick={this.handleOpenModal}
+        />
         {this.state.showLoadMoreButton && (
           <Button onLoad={this.handleLoadMore} />
         )}
         <Loader loading={this.state.loading} />
-        <Modal />
+        {this.selectedImage && (
+          <Modal
+            isOpen={true}
+            imageUrl={this.state.selectedImage}
+            onClose={this.handleCloseModal}
+          />
+        )}
       </Layout>
     );
   }
